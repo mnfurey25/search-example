@@ -9,7 +9,7 @@
   <!-- Ensure mobile-responsive rendering with proper viewport scale and device width mapping -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Define the tab title that students will see when loading this educational app -->
-  <title>Legal Research Database Simulator - Library Lab</title>
+  <title>Natural Language v. Boolean Example</title>
   <!-- Import Bootstrap 5 CSS via CDN for all layouts, margins, padding, and UI styling (No custom CSS) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
@@ -23,7 +23,7 @@
       <!-- Navbar brand representing the legal research simulator platform -->
       <span class="navbar-brand mb-0 h1">
         <!-- Book icon representing legal literature and database architecture -->
-        📖 Legal Research Database Simulator: Educational Lab
+        📖 Natural Language v. Boolean Example
       </span>
       <!-- Academic context label displayed in muted white text -->
       <span class="text-white-50 small">Legal Research Methods & Database Architecture</span>
@@ -37,11 +37,10 @@
     <section class="card border-0 shadow-sm mb-4">
       <!-- Card body containing welcoming and instructional text from the librarian -->
       <div class="card-body p-4">
-        <h5 class="card-title text-primary fw-bold">Welcome to the Search Retrieval Lab</h5>
+        <h5 class="card-title text-primary fw-bold">Natural Language v. Boolean Example</h5>
         <p class="card-text">
-          As your legal research librarian, I designed this simulator to show you how different search algorithms process your queries. 
-          Database systems do not just return matching strings; they use distinct mathematical and logical models to rank or filter primary sources. 
-          Use this panel to search our database of <strong>20 curated US statutes, case law, and federal regulations</strong>.
+          This is a vibe coded application using Google AI studio to demonstrate differences between legal database searches. 
+          This application is for academic purposes only and is not intended to give legal or professional advice.
         </p>
         <hr class="text-muted">
         <!-- Instructions grid for students to understand the three distinct engines -->
@@ -180,7 +179,7 @@
         <!-- Practical Sandbox Examples Panel -->
         <div class="card border-0 shadow-sm p-3">
           <div class="card-body">
-            <h6 class="card-title text-primary fw-bold mb-3">Suggested Lab Practices</h6>
+            <h6 class="card-title text-primary fw-bold mb-3">Example Queries</h6>
             <p class="card-text text-muted small">
               Click any sample query below to automatically configure the search engine and load simulated legal documents.
             </p>
@@ -690,7 +689,7 @@
                   <span class="text-dark small fw-bold text-uppercase font-monospace">${doc.citation}</span>
                 </div>
                 <div class="d-flex align-items-center">
-                  <span class="badge bg-light text-dark border me-1">Est. ${doc.year}</span>
+                  <span class="badge bg-light text-dark border me-1">${doc.year}</span>
                   ${doc.searchScore && doc.searchScore > 1 ? `<span class="badge bg-dark text-white">Score: ${doc.searchScore}</span>` : ''}
                 </div>
               </div>
@@ -706,7 +705,7 @@
   <!-- Footer Section: Simple branding elements -->
   <footer class="text-center py-4 bg-white border-top mt-5 small">
     <div class="container text-muted">
-      Designed as a legal research instructional aid. Standard simulated database indexing models are used.
+      Designed as a legal research instructional aid. 
     </div>
   </footer>
 
