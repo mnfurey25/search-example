@@ -1,0 +1,715 @@
+<!-- Declare the document type as standard HTML5 to ensure consistent browser rendering -->
+<!DOCTYPE html>
+<!-- Set the document language to English for accessibility and search engines -->
+<html lang="en">
+<!-- Start of the HTML Head section containing metadata, titles, and framework imports -->
+<head>
+  <!-- Set character encoding to UTF-8 to correctly render special symbols like section marks (§) -->
+  <meta charset="UTF-8">
+  <!-- Ensure mobile-responsive rendering with proper viewport scale and device width mapping -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Define the tab title that students will see when loading this educational app -->
+  <title>Legal Research Database Simulator - Library Lab</title>
+  <!-- Import Bootstrap 5 CSS via CDN for all layouts, margins, padding, and UI styling (No custom CSS) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<!-- Start of the Body section styled with a light background and dark gray text for professional contrast -->
+<body class="bg-light text-secondary">
+
+  <!-- Header Section: Simple navbar showing the administrative/academic source -->
+  <header class="navbar navbar-dark bg-dark shadow-sm">
+    <!-- Fluid container to keep navbar elements padded and aligned cleanly -->
+    <div class="container-fluid px-4">
+      <!-- Navbar brand representing the legal research simulator platform -->
+      <span class="navbar-brand mb-0 h1">
+        <!-- Book icon representing legal literature and database architecture -->
+        📖 Legal Research Database Simulator: Educational Lab
+      </span>
+      <!-- Academic context label displayed in muted white text -->
+      <span class="text-white-50 small">Legal Research Methods & Database Architecture</span>
+    </div>
+  </header>
+
+  <!-- Main Grid Layout Container: Centers the interactive card content on the screen with a top margin -->
+  <main class="container my-4">
+
+    <!-- Pedagogical Instruction Card: Welcomes the student and defines the educational objective -->
+    <section class="card border-0 shadow-sm mb-4">
+      <!-- Card body containing welcoming and instructional text from the librarian -->
+      <div class="card-body p-4">
+        <h5 class="card-title text-primary fw-bold">Welcome to the Search Retrieval Lab</h5>
+        <p class="card-text">
+          As your legal research librarian, I designed this simulator to show you how different search algorithms process your queries. 
+          Database systems do not just return matching strings; they use distinct mathematical and logical models to rank or filter primary sources. 
+          Use this panel to search our database of <strong>20 curated US statutes, case law, and federal regulations</strong>.
+        </p>
+        <hr class="text-muted">
+        <!-- Instructions grid for students to understand the three distinct engines -->
+        <div class="row g-3 small">
+          <div class="col-md-4">
+            <span class="badge bg-primary mb-1">1. Natural Language</span>
+            <p class="text-muted mb-0">Simulates semantic relevance. It parses individual keywords, ignores common stop words, and ranks results by keyword density and location.</p>
+          </div>
+          <div class="col-md-4">
+            <span class="badge bg-success mb-1">2. Terms & Connectors</span>
+            <p class="text-muted mb-0">Simulates classic Boolean syntax. Supports strict operators (<code>AND</code>, <code>OR</code>, <code>NOT</code>) and double quotes (<code>""</code>) for exact phrases.</p>
+          </div>
+          <div class="col-md-4">
+            <span class="badge bg-info mb-1">3. Filtered Search</span>
+            <p class="text-muted mb-0">Demonstrates metadata-first search. Restricts keyword search scope by categorizing document attributes before querying content.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Workspace Grid: Splitting page into search panel (left) and live education console (right) -->
+    <div class="row g-4">
+      
+      <!-- Left Column: Search Form and Results List (Takes 8 out of 12 columns on medium screens and up) -->
+      <div class="col-md-8">
+        
+        <!-- Search Console Wrapper -->
+        <div class="card border-0 shadow-sm p-4 mb-4">
+          <h5 class="card-title fw-semibold text-dark mb-3">Database Search Console</h5>
+          
+          <!-- Standard Form grouping the search bar, configuration buttons, and metadata filters -->
+          <form id="searchForm" onsubmit="event.preventDefault();">
+            
+            <!-- Standard search bar text input -->
+            <div class="mb-3">
+              <label for="searchInput" class="form-label fw-bold small text-uppercase text-muted">Enter Query</label>
+              <div class="input-group">
+                <!-- Magnifying glass prefix for clear visual intent of the search bar -->
+                <span class="input-group-text bg-white border-end-0 text-muted">🔍</span>
+                <!-- Text input field carrying standard placeholder hints -->
+                <input type="text" id="searchInput" class="form-control border-start-0 py-2" placeholder="e.g., copyright AND &quot;fair use&quot; NOT patent" aria-label="Search query text">
+              </div>
+            </div>
+
+            <!-- Dynamic Filter Controls Panel: Shown/hidden contextually depending on active search engine -->
+            <div id="filterPanel" class="p-3 bg-light rounded border mb-3 d-none">
+              <p class="fw-bold small text-uppercase text-muted mb-2">Metadata Filter Settings</p>
+              <div class="row g-2">
+                <!-- Dropdown for selecting source legal document type -->
+                <div class="col-sm-6">
+                  <label for="filterType" class="form-label small">Document Type</label>
+                  <select id="filterType" class="form-select form-select-sm">
+                    <option value="All">All Types (Statute, Case, Regulation)</option>
+                    <option value="Statute">Statutes Only</option>
+                    <option value="Case Law">Case Law Only</option>
+                    <option value="Regulation">Regulations Only</option>
+                  </select>
+                </div>
+                <!-- Dropdown for selecting historical era range -->
+                <div class="col-sm-6">
+                  <label for="filterEra" class="form-label small">Historical Era</label>
+                  <select id="filterEra" class="form-select form-select-sm">
+                    <option value="All">All Years</option>
+                    <option value="Pre-1950">Pre-1950</option>
+                    <option value="1950-1999">1950 - 1999</option>
+                    <option value="2000-Present">2000 - Present</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Search Mode Control Buttons: Toggles the engine models and sets parameters -->
+            <div class="mb-2">
+              <label class="form-label fw-bold small text-uppercase text-muted d-block mb-2">Select Retrieval Engine</label>
+              <div class="row g-2">
+                <!-- Natural Language Button -->
+                <div class="col-md-4">
+                  <button type="button" id="btnNatural" class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center" onclick="setSearchMode('Natural')">
+                    🧠 Natural Language
+                  </button>
+                </div>
+                <!-- Terms and Connectors (Boolean) Button -->
+                <div class="col-md-4">
+                  <button type="button" id="btnBoolean" class="btn btn-outline-success w-100 py-2 d-flex align-items-center justify-content-center" onclick="setSearchMode('Boolean')">
+                    ⚡ Terms & Connectors
+                  </button>
+                </div>
+                <!-- Filtered Search Button -->
+                <div class="col-md-4">
+                  <button type="button" id="btnFiltered" class="btn btn-outline-info w-100 py-2 d-flex align-items-center justify-content-center" onclick="setSearchMode('Filtered')">
+                    ⚙️ Filtered Search
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Output Results Section Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold text-dark m-0">Search Results</h5>
+          <!-- Badge displaying the number of database items matching current search parameters -->
+          <span class="badge bg-secondary" id="matchCounter">20 / 20 Documents Displayed</span>
+        </div>
+
+        <!-- Result Cards Container: Dynamically populated by JavaScript search execution -->
+        <div id="resultsContainer">
+          <!-- Default placeholder shown during initial load -->
+        </div>
+
+      </div>
+
+      <!-- Right Column: Educational Metadata and Interactive Lesson Tool (4 out of 12 columns) -->
+      <div class="col-md-4">
+        
+        <!-- Live Engine Interpretation Console -->
+        <div class="card border-0 shadow-sm bg-dark text-white p-3 mb-4">
+          <div class="card-body">
+            <h6 class="card-title text-warning fw-bold small text-uppercase tracking-wider">⚡ Live Engine Parser</h6>
+            <p class="card-text small text-white-50">
+              This panel shows how the database engine is reading your query strings in real time.
+            </p>
+            <hr class="border-secondary my-2">
+            <!-- Parameter dump displaying processed query outputs -->
+            <div class="small">
+              <p class="mb-1"><strong>Active Mode:</strong> <span id="logMode" class="text-info">Natural Language</span></p>
+              <p class="mb-1"><strong>Normalized Query:</strong> <code id="logQuery" class="text-success">N/A</code></p>
+              <div id="logDetails" class="mt-2 text-white-50 font-monospace" style="font-size: 0.8rem;">
+                No active query input. Showing raw database list.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Practical Sandbox Examples Panel -->
+        <div class="card border-0 shadow-sm p-3">
+          <div class="card-body">
+            <h6 class="card-title text-primary fw-bold mb-3">Suggested Lab Practices</h6>
+            <p class="card-text text-muted small">
+              Click any sample query below to automatically configure the search engine and load simulated legal documents.
+            </p>
+            <!-- Educational scenario suggestions -->
+            <div class="list-group list-group-flush small">
+              <!-- Example 1 -->
+              <button type="button" class="list-group-item list-group-item-action py-2 px-0 bg-transparent text-start" onclick="runExample('unauthorized access computer liability', 'Natural')">
+                <span class="badge bg-primary me-1">Natural</span>
+                <span class="fw-semibold">"unauthorized computer liability"</span>
+                <div class="text-muted text-truncate" style="max-width: 250px;">Evaluates keyword frequencies across documents.</div>
+              </button>
+              <!-- Example 2 -->
+              <button type="button" class="list-group-item list-group-item-action py-2 px-0 bg-transparent text-start" onclick="runExample('&quot;fair use&quot; AND copyright NOT patent', 'Boolean')">
+                <span class="badge bg-success me-1">Boolean</span>
+                <span class="fw-semibold">"fair use" AND copyright NOT patent</span>
+                <div class="text-muted text-truncate" style="max-width: 250px;">Executes logical filtering on precise phrasing and negation.</div>
+              </button>
+              <!-- Example 3 -->
+              <button type="button" class="list-group-item list-group-item-action py-2 px-0 bg-transparent text-start" onclick="runExample('chemical safety protection', 'Filtered', 'Regulation', '1950-1999')">
+                <span class="badge bg-info me-1">Filtered</span>
+                <span class="fw-semibold">"chemical safety" in 1950-1999 Regulations</span>
+                <div class="text-muted text-truncate" style="max-width: 250px;">Applies high-speed categorical filtering before parsing texts.</div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- JavaScript Section: Implements database, search logic, interface controllers, and data mapping -->
+  <script>
+    // Define the curated mock legal database consisting of exactly 20 diverse US documents
+    // Containing balanced elements of US Statutes, federal Case Law, and Federal Regulations
+    const legalDatabase = [
+      {
+        id: 1,
+        type: "Statute",
+        citation: "18 U.S.C. § 1030",
+        title: "Computer Fraud and Abuse Act (CFAA)",
+        description: "Prohibits accessing a computer without authorization or exceeding authorized access. Establishes basic civil and criminal liability for cybercrimes and unauthorized digital breaches.",
+        year: 1986
+      },
+      {
+        id: 2,
+        type: "Statute",
+        citation: "17 U.S.C. § 107",
+        title: "Limitation on Exclusive Rights: Fair Use",
+        description: "Codifies the four-factor test for fair use of copyrighted material, considering purpose, nature of the work, amount used, and market effect.",
+        year: 1976
+      },
+      {
+        id: 3,
+        type: "Statute",
+        citation: "42 U.S.C. § 1983",
+        title: "Civil Action for Deprivation of Rights",
+        description: "Allows individuals to sue state and local government officials for violating civil and constitutional rights under color of state law.",
+        year: 1871
+      },
+      {
+        id: 4,
+        type: "Statute",
+        citation: "15 U.S.C. § 1",
+        title: "Sherman Antitrust Act",
+        description: "Outlaws joint actions that restrain trade, commerce, or market competition. Prohibits monopolies and unfair business trusts or practices.",
+        year: 1890
+      },
+      {
+        id: 5,
+        type: "Statute",
+        citation: "29 U.S.C. § 206",
+        title: "Fair Labor Standards Act (FLSA) - Minimum Wage",
+        description: "Establishes standard minimum wage, overtime pay eligibility, recordkeeping rules, and child labor restrictions affecting federal employees.",
+        year: 1938
+      },
+      {
+        id: 6,
+        type: "Statute",
+        citation: "5 U.S.C. § 552",
+        title: "Freedom of Information Act (FOIA)",
+        description: "Mandates disclosure of administrative agency records. Establishes statutory public access rights to federal agency documentation with specific exemptions.",
+        year: 1966
+      },
+      {
+        id: 7,
+        type: "Statute",
+        citation: "42 U.S.C. § 2000e-2",
+        title: "Equal Employment Opportunity (Title VII)",
+        description: "Prohibits employment discrimination based on race, color, religion, sex, or national origin. Protects workers from occupational discrimination.",
+        year: 1964
+      },
+      {
+        id: 8,
+        type: "Case Law",
+        citation: "Brown v. Board of Education, 347 U.S. 483",
+        title: "Brown v. Board of Education",
+        description: "Landmark Supreme Court case declaring state-mandated segregation in public schools unconstitutional under the Equal Protection Clause of the Fourteenth Amendment.",
+        year: 1954
+      },
+      {
+        id: 9,
+        type: "Case Law",
+        citation: "Miranda v. Arizona, 384 U.S. 436",
+        title: "Miranda v. Arizona",
+        description: "Establishes procedural protection guidelines for custodial interrogation. Requires officers to read criminal suspects their rights to protect against self-incrimination under the Fifth Amendment.",
+        year: 1966
+      },
+      {
+        id: 10,
+        type: "Case Law",
+        citation: "Google LLC v. Oracle America, Inc., 593 U.S. ___",
+        title: "Google LLC v. Oracle America, Inc.",
+        description: "Rules that Google's copying of a computer API's functional code lines to create a new software system constitutes standard permitted fair use.",
+        year: 2021
+      },
+      {
+        id: 11,
+        type: "Case Law",
+        citation: "Marbury v. Madison, 5 U.S. 137",
+        title: "Marbury v. Madison",
+        description: "Establishes the foundation of American constitutional law and judicial authority. Solidifies the doctrine of judicial review to strike down unlawful Congressional acts.",
+        year: 1803
+      },
+      {
+        id: 12,
+        type: "Case Law",
+        citation: "Wickard v. Filburn, 317 U.S. 111",
+        title: "Wickard v. Filburn",
+        description: "Expands the federal government's authority under the Commerce Clause. Holds that personal, local agricultural production can be federally regulated.",
+        year: 1942
+      },
+      {
+        id: 13,
+        type: "Case Law",
+        citation: "Loper Bright Enterprises v. Raimondo, 603 U.S. ___",
+        title: "Loper Bright Enterprises v. Raimondo",
+        description: "Overrules long-standing administrative agency deference (Chevron deference), returning statutory interpretation duties exclusively to the federal courts.",
+        year: 2024
+      },
+      {
+        id: 14,
+        type: "Case Law",
+        citation: "Mapp v. Ohio, 367 U.S. 643",
+        title: "Mapp v. Ohio",
+        description: "Incorporates the Fourth Amendment's exclusionary rule protection to state level. Prevents prosecutors from using unlawfully obtained evidence during state trials.",
+        year: 1961
+      },
+      {
+        id: 15,
+        type: "Case Law",
+        citation: "Gideon v. Wainwright, 372 U.S. 335",
+        title: "Gideon v. Wainwright",
+        description: "Holds that the Sixth Amendment guarantees criminal defendants the right to assistance of counsel in state courts, even if they cannot afford a lawyer.",
+        year: 1963
+      },
+      {
+        id: 16,
+        type: "Regulation",
+        citation: "21 C.F.R. § 101.9",
+        title: "FDA Food Labeling: Nutrition Labeling",
+        description: "Specifies detailed formatting, chemical descriptions, and layout requirements for nutritional information tables displayed on commercial food products.",
+        year: 1993
+      },
+      {
+        id: 17,
+        type: "Regulation",
+        citation: "40 C.F.R. § 1500.1",
+        title: "EPA NEPA Policy and Administrative Guidelines",
+        description: "Details regulatory standards for federal agencies to assess environmental impacts, create environmental impact statements, and enforce policy review rules.",
+        year: 1978
+      },
+      {
+        id: 18,
+        type: "Regulation",
+        citation: "47 C.F.R. § 73.1212",
+        title: "FCC Sponsorship Identification Rules",
+        description: "Mandates complete public disclosure of administrative identities sponsoring commercial broadcasts, radio, and public television program listings.",
+        year: 1975
+      },
+      {
+        id: 19,
+        type: "Regulation",
+        citation: "29 C.F.R. § 1910.1200",
+        title: "OSHA Hazard Communication Standard",
+        description: "Enforces workplace safety guidelines requiring employers to document chemical hazards, write safety sheets, and provide safety labeling protection.",
+        year: 1983
+      },
+      {
+        id: 20,
+        type: "Regulation",
+        citation: "45 C.F.R. § 164.502",
+        title: "HIPAA Privacy Rule: Protected Health Information",
+        description: "Regulates federal limitations on the disclosure, sharing, and transmission of private medical records and patient health identification data.",
+        year: 2002
+      }
+    ];
+
+    // Global variable tracking the active search engine mode (defaults to Natural Language)
+    let activeSearchMode = 'Natural';
+
+    // UI State Management: Switches search settings, updates button visuals, and hides/shows filter settings
+    function setSearchMode(mode) {
+      // Set global variable to the selected mode
+      activeSearchMode = mode;
+      
+      // Update visual states of selection buttons using Bootstrap styling classes
+      document.getElementById('btnNatural').className = mode === 'Natural' ? 'btn btn-primary w-100 py-2' : 'btn btn-outline-primary w-100 py-2';
+      document.getElementById('btnBoolean').className = mode === 'Boolean' ? 'btn btn-success w-100 py-2' : 'btn btn-outline-success w-100 py-2';
+      document.getElementById('btnFiltered').className = mode === 'Filtered' ? 'btn btn-info w-100 py-2' : 'btn btn-outline-info w-100 py-2';
+
+      // Capture the filter panel element reference
+      const filterPanel = document.getElementById('filterPanel');
+      if (mode === 'Filtered') {
+        // Remove Bootstrap 'd-none' class to make metadata selectors visible
+        filterPanel.classList.remove('d-none');
+      } else {
+        // Add Bootstrap 'd-none' class to hide metadata selectors
+        filterPanel.classList.add('d-none');
+      }
+
+      // Re-run search using current input whenever the mode changes
+      executeSearch();
+    }
+
+    // Interactive Scenario Sandbox Helper: Loads pre-determined queries directly into form for demonstration
+    function runExample(query, mode, filterType = 'All', filterEra = 'All') {
+      // Set text in the primary search input
+      document.getElementById('searchInput').value = query;
+      // Configure elements to match suggested example type
+      document.getElementById('filterType').value = filterType;
+      document.getElementById('filterEra').value = filterEra;
+      // Initialize state changes
+      setSearchMode(mode);
+    }
+
+    // Setup input listeners to execute search dynamically while the student types
+    document.getElementById('searchInput').addEventListener('input', executeSearch);
+    document.getElementById('filterType').addEventListener('change', executeSearch);
+    document.getElementById('filterEra').addEventListener('change', executeSearch);
+
+    // Initial load: Render full database on startup
+    executeSearch();
+
+    // Central Search Router: Analyzes parameters and directs querying to the appropriate function
+    function executeSearch() {
+      // Normalize raw search input for reliable query evaluation
+      const rawQuery = document.getElementById('searchInput').value;
+      const normalizedQuery = rawQuery.trim();
+
+      // Keep references to DOM display outputs
+      const logModeText = document.getElementById('logMode');
+      const logQueryText = document.getElementById('logQuery');
+      const logDetailsText = document.getElementById('logDetails');
+
+      // Update basic parser diagnostics display
+      logModeText.innerText = activeSearchMode === 'Natural' ? 'Natural Language' : activeSearchMode === 'Boolean' ? 'Terms & Connectors' : 'Filtered Search';
+      logQueryText.innerText = normalizedQuery ? `"${normalizedQuery}"` : 'Empty Query (Showing All)';
+
+      // Variables to store processed match collections
+      let filteredResults = [];
+
+      // Route processing requests depending on selected engine
+      if (!normalizedQuery && activeSearchMode !== 'Filtered') {
+        // Return full database when no query exists in text models
+        filteredResults = legalDatabase.map(doc => ({ ...doc, searchScore: 1 }));
+        logDetailsText.innerHTML = "No active query input. Showing raw database list.";
+      } else if (activeSearchMode === 'Natural') {
+        // Execute relevance-based keyword processing
+        filteredResults = searchNaturalLanguage(normalizedQuery, logDetailsText);
+      } else if (activeSearchMode === 'Boolean') {
+        // Execute precise logic-based boolean processing
+        filteredResults = searchBoolean(normalizedQuery, logDetailsText);
+      } else if (activeSearchMode === 'Filtered') {
+        // Execute combination metadata and keyword parsing
+        filteredResults = searchFiltered(normalizedQuery, logDetailsText);
+      }
+
+      // Render updated list elements to viewport
+      renderResults(filteredResults);
+    }
+
+    // Algorithm 1: Natural Language Search Engine Simulation
+    // Ranks matching documents dynamically by term density and location weight
+    function searchNaturalLanguage(query, logPanel) {
+      // Convert query to lower-case elements and split into term arrays
+      const rawTokens = query.toLowerCase().split(/\s+/);
+      
+      // Stop-words list commonly ignored by search indexers to avoid irrelevant high scoring
+      const stopWords = ['the', 'and', 'or', 'not', 'of', 'in', 'to', 'for', 'by', 'on', 'with', 'a', 'an', 'is', 'at'];
+      
+      // Filter out stop words from token array
+      const searchTokens = rawTokens.filter(token => token.length > 0 && !stopWords.includes(token));
+
+      if (searchTokens.length === 0) {
+        logPanel.innerHTML = "Query contained only common words or empty spaces. Search scoring disabled.";
+        return legalDatabase.map(doc => ({ ...doc, searchScore: 0 }));
+      }
+
+      // Print operational analysis to student diagnostics box
+      logPanel.innerHTML = `<strong>Ignored Stop-Words:</strong> ${rawTokens.filter(t => stopWords.includes(t)).join(', ') || 'None'}<br>` +
+                           `<strong>Indexed Keywords:</strong> ${searchTokens.map(t => `"${t}"`).join(', ')}<br>` +
+                           `<strong>Ranking Model:</strong> Score = (Title Match * 2) + Description Match.`;
+
+      const scores = [];
+
+      // Loop through each document to compute contextual relevance scores
+      legalDatabase.forEach(doc => {
+        let score = 0;
+        const searchStringTitle = doc.title.toLowerCase();
+        const searchStringDesc = doc.description.toLowerCase();
+
+        // Check frequency of each non-stop word token in title and description fields
+        searchTokens.forEach(token => {
+          // Double score weight for title fields to favor high-level subject matches
+          if (searchStringTitle.includes(token)) {
+            score += 2;
+          }
+          // Single score weight for appearance in descriptions
+          if (searchStringDesc.includes(token)) {
+            score += 1;
+          }
+        });
+
+        // Add to result matrix if score is greater than 0
+        if (score > 0) {
+          scores.push({ ...doc, searchScore: score });
+        }
+      });
+
+      // Sort outputs descending from highest score to lowest score
+      return scores.sort((a, b) => b.searchScore - a.searchScore);
+    }
+
+    // Algorithm 2: Terms & Connectors (Boolean) Search Engine Simulation
+    // Evaluates logical operations (AND, OR, NOT) and exact phrases inside quotation marks
+    function searchBoolean(query, logPanel) {
+      // Parse logic sections of positive terms vs negative terms (NOT operations)
+      const partsOfNot = query.split(/\bNOT\b/);
+      const positiveClause = partsOfNot[0] ? partsOfNot[0].trim() : "";
+      const negativeClauses = partsOfNot.slice(1).map(clause => clause.trim());
+
+      // Diagnostic tracker variable to dump parsing data directly to students
+      let operatorDetected = "Default (Exact Phrase)";
+      let parsedPositiveTerms = [];
+
+      // Helper function to extract text strings inside quotes or treat strings as simple words
+      function matchTermOrPhrase(documentText, searchPhrase) {
+        searchPhrase = searchPhrase.trim();
+        // Exact matching logic for text wrapped in quotation marks
+        if (searchPhrase.startsWith('"') && searchPhrase.endsWith('"')) {
+          const literalString = searchPhrase.slice(1, -1).toLowerCase();
+          return documentText.includes(literalString);
+        }
+        // Standard case-insensitive fallback string matching
+        return documentText.includes(searchPhrase.toLowerCase());
+      }
+
+      // Core parser verifying match conditions on each document
+      const matchingDocs = legalDatabase.filter(doc => {
+        // Compile search text fields into single unified string
+        const searchableContent = `${doc.title} ${doc.citation} ${doc.description}`.toLowerCase();
+        
+        let isPositiveMatch = false;
+
+        // Route evaluation checks depending on operator presence inside positive clause
+        if (positiveClause.includes(" OR ")) {
+          operatorDetected = "Logical OR (Either term can be present)";
+          parsedPositiveTerms = positiveClause.split(/\bOR\b/).map(term => term.trim());
+          // Match passes if ANY terms in array evaluate to true
+          isPositiveMatch = parsedPositiveTerms.some(term => matchTermOrPhrase(searchableContent, term));
+        } else if (positiveClause.includes(" AND ")) {
+          operatorDetected = "Logical AND (All terms must be present)";
+          parsedPositiveTerms = positiveClause.split(/\bAND\b/).map(term => term.trim());
+          // Match passes if EVERY term in array evaluates to true
+          isPositiveMatch = parsedPositiveTerms.every(term => matchTermOrPhrase(searchableContent, term));
+        } else {
+          // Default: Match single words or simple sentences directly
+          operatorDetected = "Literal Search / Phrase";
+          parsedPositiveTerms = [positiveClause];
+          isPositiveMatch = matchTermOrPhrase(searchableContent, positiveClause);
+        }
+
+        // Process NOT clauses: Check if excluded terms appear in the document text
+        let containsNegativeTerm = false;
+        if (negativeClauses.length > 0) {
+          containsNegativeTerm = negativeClauses.some(negatedTerm => matchTermOrPhrase(searchableContent, negatedTerm));
+        }
+
+        // Logical pass rule: Must match positive terms, must NOT match negative terms
+        return isPositiveMatch && !containsNegativeTerm;
+      });
+
+      // Write parsed logical structures directly to educational logs
+      logPanel.innerHTML = `<strong>Operator Rule:</strong> ${operatorDetected}<br>` +
+                           `<strong>Positive Elements:</strong> ${parsedPositiveTerms.map(t => `<code>${t}</code>`).join(', ')}<br>` +
+                           `<strong>Negative Elements:</strong> ${negativeClauses.length > 0 ? negativeClauses.map(t => `<code>${t}</code>`).join(', ') : 'None'}`;
+
+      // Assign equal weight ranking scores to filtered boolean outputs
+      return matchingDocs.map(doc => ({ ...doc, searchScore: 1 }));
+    }
+
+    // Algorithm 3: Filtered Metadata Search Engine Simulation
+    // Combines hard database criteria checks (era and type) with keyword content queries
+    function searchFiltered(query, logPanel) {
+      // Capture filter values set on form dropdown inputs
+      const selectedType = document.getElementById('filterType').value;
+      const selectedEra = document.getElementById('filterEra').value;
+
+      // Filter database array using primary metadata filters before examining query contents
+      const metadataFilteredDocs = legalDatabase.filter(doc => {
+        // Evaluate type field
+        const matchesType = (selectedType === 'All' || doc.type === selectedType);
+        
+        // Evaluate year ranges matching selected history era
+        let matchesEra = true;
+        if (selectedEra === 'Pre-1950') {
+          matchesEra = (doc.year < 1950);
+        } else if (selectedEra === '1950-1999') {
+          matchesEra = (doc.year >= 1950 && doc.year <= 1999);
+        } else if (selectedEra === '2000-Present') {
+          matchesEra = (doc.year >= 2000);
+        }
+
+        return matchesType && matchesEra;
+      });
+
+      // Document how the metadata isolation process reduces searching search workloads
+      logPanel.innerHTML = `<strong>Pre-filtering Step:</strong> Isolated metadata first.<br>` +
+                           `<strong>Target Category:</strong> ${selectedType}<br>` +
+                           `<strong>Target Era:</strong> ${selectedEra}<br>` +
+                           `<strong>Isolated Documents:</strong> ${metadataFilteredDocs.length} remaining out of 20.`;
+
+      // Apply standard word matches within metadata subset
+      if (!query.trim()) {
+        // Return full subset if no sub-query keywords exist
+        return metadataFilteredDocs.map(doc => ({ ...doc, searchScore: 1 }));
+      }
+
+      const rawTokens = query.toLowerCase().split(/\s+/);
+      const searchTokens = rawTokens.filter(token => token.length > 0);
+      const results = [];
+
+      // Compute simple keyword occurrences inside the isolated metadata documents
+      metadataFilteredDocs.forEach(doc => {
+        let score = 0;
+        const textContent = `${doc.title} ${doc.description}`.toLowerCase();
+        
+        searchTokens.forEach(token => {
+          if (textContent.includes(token)) {
+            score++;
+          }
+        });
+
+        if (score > 0) {
+          results.push({ ...doc, searchScore: score });
+        }
+      });
+
+      // Sort matching documents based on term match scores
+      return results.sort((a, b) => b.searchScore - a.searchScore);
+    }
+
+    // UI Renderer: Generates Bootstrap HTML elements dynamically based on search engine arrays
+    function renderResults(documents) {
+      // Capture target insertion point inside container wrapper
+      const container = document.getElementById('resultsContainer');
+      const counterBadge = document.getElementById('matchCounter');
+
+      // Update badge tracking display counts
+      counterBadge.innerText = `${documents.length} / 20 Documents Displayed`;
+
+      // Return a professional alert block when matches do not return records
+      if (documents.length === 0) {
+        container.innerHTML = `
+          <div class="alert alert-warning text-center border-0 py-5 rounded shadow-sm" role="alert">
+            <h4 class="alert-heading fw-bold">⚠️ No Matching Records Found</h4>
+            <p class="mb-0 small text-muted">The search criteria did not match any of our database items. Try expanding your search queries or altering the active search paradigm settings.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Generate HTML list using template loops
+      container.innerHTML = documents.map(doc => {
+        // Set dynamic badges for document categories
+        let badgeColorClass = "bg-primary";
+        let documentIcon = "📜";
+
+        if (doc.type === "Case Law") {
+          badgeColorClass = "bg-success";
+          documentIcon = "📘";
+        } else if (doc.type === "Regulation") {
+          badgeColorClass = "bg-warning text-dark";
+          documentIcon = "⚙️";
+        }
+
+        // Render standard layout components containing citations, descriptions, and dynamic badges
+        return `
+          <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body p-3">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <span class="badge ${badgeColorClass} me-2">${documentIcon} ${doc.type}</span>
+                  <span class="text-dark small fw-bold text-uppercase font-monospace">${doc.citation}</span>
+                </div>
+                <div class="d-flex align-items-center">
+                  <span class="badge bg-light text-dark border me-1">Est. ${doc.year}</span>
+                  ${doc.searchScore && doc.searchScore > 1 ? `<span class="badge bg-dark text-white">Score: ${doc.searchScore}</span>` : ''}
+                </div>
+              </div>
+              <h5 class="card-title text-dark fw-bold mb-1">${doc.title}</h5>
+              <p class="card-text text-muted small mb-0">${doc.description}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  </script>
+
+  <!-- Footer Section: Simple branding elements -->
+  <footer class="text-center py-4 bg-white border-top mt-5 small">
+    <div class="container text-muted">
+      Designed as a legal research instructional aid. Standard simulated database indexing models are used.
+    </div>
+  </footer>
+
+<!-- End of HTML Document -->
+</body>
+</html>
